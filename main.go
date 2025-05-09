@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -88,8 +89,28 @@ func addRecord(db *gorm.DB) {
 	// courses := []Course{course1, course2, course3, course4, course5}
 	// db.Create(&courses)
 
-	// 批量创建学生
+	// 创建学生
+	// 多对多添加记录
 
+	var courses []Course
+	db.Where("name in ?", []string{"js", "python"}).Find(&courses)
+	// 找到课程"go","java"的记录并存储在courses切片中
+	fmt.Println("courses:", courses)
+
+	// // 方式1
+	// s1 := Student{Name: "Jack", Sno: 250001, Pwd: "111111", ClassID: 10, Courses: courses}
+	// db.Create(&s1)
+
+	// // 方式2
+	// s2 := Student{Name: "Tome", Sno: 250002, Pwd: "222222", ClassID: 12}
+	// db.Create(&s2)
+	// db.Model(&s2).Association("Courses").Append(courses)
+
+	// // 方式3 先查询再绑定
+	// var student Student
+	// db.Where("name = ?", "Tome").First(&student)
+	// fmt.Println("student:", student)
+	// db.Model(&student).Association("Courses").Append(courses)
 }
 
 func deleteRecord(db *gorm.DB) {
